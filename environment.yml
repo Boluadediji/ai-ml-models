@@ -1,0 +1,10 @@
+name: bank_env
+dependencies:
+  - python=3.10
+  - scikit-learn
+  - numpy
+  - pandas
+  - pip
+  - pip:
+    - gunicorn
+    - azureml-inference-server-http

@@ -1,0 +1,17 @@
+python-dotenv
+numpy
+pandas
+scikit-learn
+openai
+langchain
+langchain-openai
+langchain-core
+langchain-community
+langchain-classic
+azure-cognitiveservices-speech
+requests
+azure-ai-ml
+azure-identity
+azure-core
+azure-storage-blob
+msal
