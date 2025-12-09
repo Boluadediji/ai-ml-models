@@ -1,0 +1,559 @@
+Wema Bank (ALAT) — Comprehensive Transfer Policy & AI CSO Knowledge Base
+Document Version: 1.0
+Owner: AI & DATA TEAM
+Effective Date: 2025-12-08
+Last Reviewed: 2025-12-08
+Confidentiality: Internal Use Only — Restricted distribution
+
+PURPOSE & SCOPE
+This document defines the policy, procedures and knowledge that the AI Customer Service Officer (AI CSO), frontline agents and operations teams will use to handle transfer-related issues, card issues, and product FAQs for ALAT (Wema Bank). It is intended for operational teams, the AI/NLP team, Risk, Legal, Compliance and senior management. The scope includes domestic transfers (NIP/NIBSS, RTGS, Instant Payments), internal ledger transfers, card-related complaints (debit/virtual/physical), funding reversals, recalls, FX-related transfers, cross-border messaging, and customer-facing responses via chat/phone/email.
+
+PHILOSOPHY & GUIDING PRINCIPLES
+
+Customer-centric: Prioritize empathy, transparency and speed. The customer's concern is handled as urgent until validated otherwise.
+
+Secure-by-default: Never ask for or log full PAN, CVV, PINs or full identity numbers in clear text. Use masked fields and secure channels.
+
+Evidence-first: Actions are based on transactional evidence (switch logs, core banking traces, PSP receipts).
+
+First Contact Resolution (FCR): Maximize auto-resolution where safe to do so. Where automation is not possible, provide clear SLAs and escalation paths.
+
+Auditability & Traceability: Every ticket/action must have an immutable identifier and recorded audit trail.
+
+Continuous improvement: Use RCA and metrics to reduce repeat incidents.
+
+DEFINITIONS & ABBREVIATIONS
+
+ALAT: Wema Bank digital banking product
+
+PAN: Primary Account Number (card number)
+
+NIP: Nigeria Inter-Bank Settlement System Instant Payments
+
+RTGS: Real Time Gross Settlement
+
+PSP: Payment Service Provider
+
+FCR: First Contact Resolution
+
+SLA: Service Level Agreement / Target resolution time
+
+GL: General Ledger
+
+APP: Authorized Push Payment (customer-authorized transaction)
+
+BVN: Bank Verification Number
+
+PCI-DSS: Payment Card Industry Data Security Standard
+
+NDPR: Nigeria Data Protection Regulation
+
+PSPM: Payment Service Provider Message (or error codes)
+
+TAT: Turnaround Time
+
+ACCOUNT TIERS, LIMITS & REQUIREMENTS
+This section describes standard retail account tiers used by ALAT and associated features, KYC, and limits. (Note: corporate accounts follow a separate, stricter onboarding with higher limits and documentary requirements.)
+
+4.1 TIER 1 — BASIC (Low friction)
+
+Eligibility: Phone number + minimal details. BVN may not be required for very limited access depending on product localization.
+
+Typical Limits: Daily transfer limit: ₦20,000; Monthly cumulative: ₦50,000; Single transaction cap: ₦10,000.
+
+Features: View balance, receive transfers, basic savings, limited wallet functionality.
+
+KYC Requirements: Basic identity (name, phone). No document upload required.
+
+Ideal for: Unbanked / onboarding funnel users.
+
+Notes: Tier 1 accounts cannot perform certain functions (card issuance, large transfers, investment products).
+
+4.2 TIER 2 — ENHANCED (Standard retail)
+
+Eligibility: BVN required; basic identity verification completed.
+
+Typical Limits: Daily transfer limit: ₦200,000; Monthly cumulative: ₦1,000,000; Single transaction cap: ₦200,000.
+
+Features: Debit card ordering (virtual), peer-to-peer transfers, bill payments, improved savings goals.
+
+KYC: BVN linkage, basic address and ID verification may be prompted.
+
+Notes: Some services (overdraft, loans) require Tier 3 upgrade.
+
+4.3 TIER 3 — FULL KYC (High privileges)
+
+Eligibility: BVN validated; government-issued ID; utility bill; possible face verification.
+
+Typical Limits: Daily transfer limit: ₦2,000,000+ (subject to credit assessment and product), single transaction cap higher at bank discretion.
+
+Features: Physical debit card issuance, unlimited transfers within regulatory bounds, access to loan products, investment features, higher withdrawal limits.
+
+KYC: Full documentation; periodic KYC refresh (every 1-3 years depending on risk).
+
+Note: Tier 3 accounts are required for corporate customers, merchants, and certain retail services. Enhanced AML monitoring applies.
+
+4.4 CORPORATE ACCOUNTS & SME VARIANTS
+
+Require RC (Registration Certificate), company documents, authorized signatories, resolution of board where applicable. Limits and permissions are profile-driven and subject to contractual terms.
+
+TRANSFER CATEGORIES & ISSUE TAXONOMY
+The AI agent must first classify incoming transfer queries into the following taxonomy to route resolution steps and SLAs effectively.
+
+Category A — Customer-Reported Discrepancies
+A1 Wrong account credited
+A2 Wrong amount transferred
+A3 Duplicate transfer (double debit)
+
+Category B — Transaction Failures & Stuck Transfers
+B1 Debited but failed (auto-reversal expected)
+B2 Pending beyond SLA
+B3 Timeout between switch & beneficiary bank (intermittent)
+
+Category C — Recipient-Related Issues
+C1 Recipient not credited (receiving bank delay)
+C2 Closed account / Dormant account credited
+C3 Beneficiary returns funds / claims non-receipt
+
+Category D — System & Infrastructure Issues
+D1 Core banking downtime / API failures
+D2 Network partner outage (e.g., PSP, switch)
+D3 Message format / mapping errors (ISO 8583/20022 inconsistencies)
+
+Category E — Cross-border, FX & Conversion issues
+E1 FX rate disputes
+E2 Correspondent bank delays
+E3 Sanctions or compliance holds
+
+Category F — Third-Party (PSP/Aggregator) Issues
+F1 PSP delayed callback
+F2 PSP reconciliation mismatch
+
+TRIAGE WORKFLOW (AI + HUMAN HANDOVER)
+The AI CSO performs an initial automated triage using the following steps. Where AI confidence < threshold or security risk is detected, immediate handover occurs.
+
+T — Track & Log
+
+Create ticket with schema in Appendix A.
+
+Acknowledge customer immediately with ticket ID.
+
+R — Reproduce & Diagnose
+
+Use Transaction ID or Account/Amount/Date to search core logs, switch logs, PSP callbacks, and reconciliation feeds.
+
+Map status code to human-friendly state using mapping table (Appendix B).
+
+I — Investigate & Classify
+
+Map the transaction to taxonomy and determine likely cause (e.g., "returned by beneficiary due to closed account").
+
+A — Act & Execute Resolution
+
+Auto-resolve where safe (e.g., automated reversal, show proof of credit, cancel pending internal transfer).
+
+For manual steps (recall, GL correction) create downstream operational tasks with SLA tags.
+
+G — Communicate & Follow-up
+
+Provide periodic updates (initial + ETA + resolution). Use templated messages and ensure personalization.
+
+E — Evaluate & Feedback
+
+Attach RCA tags and severity. Feed back to product/engineering to fix root causes.
+
+DETAILED RESOLUTION PATHS (EXTENSIVE)
+7.1 CATEGORY A — CUSTOMER-REPORTED DISCREPANCIES
+A1: Wrong Account Credited — Steps
+
+Validate transaction details (ref, amount, timestamp) with customer.
+
+Check settlement status: Pending / Sent / Credited / Returned.
+
+If Pending: attempt to stop in queue (internal hold) and notify recipient bank.
+
+If Sent & Credited externally: initiate formal recall with receiving bank and create file with proof of instruction, customer signature if required.
+
+Set priority based on amount, customer tier, and fraud risk.
+
+Communicate timelines and monitor recall status. Update customer every 48 hours until closed.
+AI BOT SCRIPT (Friendly & Clear):
+"Hello [Name]. I have created Ticket #[TICKET]. I can see the transfer of ₦[AMOUNT] was sent to [BANK/ACCOUNT]. I’ll attempt to stop or recall this transfer now. Recalls can take 1–4 weeks. I will provide updates as soon as I have them. Would you like me to email a copy of this case summary to your registered email?"
+
+A2: Wrong Amount
+
+Validate if the customer made an APP (authorized) mistake or there was system multiplication error.
+
+If APP mistake: document admission and follow recall path.
+
+If system error: treat as Priority - run automated audit to detect duplicate posting, currency misapplication or fee miscalculation. Reverse and correct GL as needed.
+AI BOT SCRIPT:
+"Thank you. Ticket #[TICKET] has been created and prioritized. Our Payments team will investigate the amount discrepancy and provide an update within 24 hours."
+
+A3: Duplicate Transfer (Double Debit)
+
+Auto-detect by matching attributes (amount, timestamp proximity, payee).
+
+If duplicate and external: initiate recall; if internal, issue immediate auto-reversal.
+
+Conduct root cause analysis for duplicate submission (UI double-click, retry on timeout) and patch product/UI to prevent recurrence.
+AI BOT SCRIPT:
+"I can see two similar transactions for ₦[AMOUNT]. I have initiated a duplicate check and, if confirmed, we will reverse the extra debit. Ticket #[TICKET]."
+
+7.2 CATEGORY B — TRANSACTION FAILURES & STUCK TRANSFERS
+B1: Debited but Marked Failed — Steps
+
+Retrieve switch error code and core posting trace.
+
+Trigger auto-reversal workflow if supported.
+
+If auto-reversal not completed in SLA, create GL correction ticket for Finance with supporting evidence.
+
+Communicate estimated reversal window (1–3 business days) and escalate if delayed beyond SLA.
+AI BOT SCRIPT:
+"We initiated an auto-reversal for ₦[AMOUNT] (Ref #[REF]). Auto-reversals typically post within 1–3 business days. If not posted by [DATE], reply ESCALATE and I’ll prioritize this for you."
+
+B2: Pending Beyond SLA
+
+Check queue backlog, partner outages, and fraud holds.
+
+If queue backlog: escalate to Payments Ops; if hold due to compliance/fraud: request additional KYC from customer (e.g., beneficiary identity) where allowed.
+AI BOT SCRIPT:
+"Your transfer is pending longer than expected. I’ve escalated this to our Payments team. A specialist will update you within 4 hours. Meanwhile, did you receive any alert or SMS concerning irregular activity?"
+
+7.3 CATEGORY C — RECIPIENT-RELATED ISSUES
+C1: Recipient Non-Receipt
+
+Provide beneficiary bank reference and advise sender to share with beneficiary bank.
+
+Offer to open and manage trace request on behalf of sender.
+AI BOT SCRIPT:
+"The transfer was sent to [BENEFICIARY BANK] with reference [BANK_REF]. Please provide this reference to the beneficiary to help their bank trace the funds. I can also open a trace request for you now."
+
+C2: Closed/Dormant Account
+
+Typically returned to sender. Monitor returns; if not returned, escalate recall.
+AI BOT SCRIPT:
+"It appears the beneficiary account may be closed. Normally, funds are returned automatically. I will monitor and update you. Ticket #[TICKET]."
+
+C3: Beneficiary Claims Non-Receipt
+
+Provide proof-of-payment to sender (value date, switch reference). Encourage beneficiary to contact their bank with reference.
+AI BOT SCRIPT:
+"We show the transfer was delivered to the beneficiary bank with reference [REF]. Please share this reference with the recipient’s bank; I can also open a ticket to assist."
+
+7.4 CATEGORY D — SYSTEM & INFRASTRUCTURE ISSUES
+D1: Core Banking/API Down
+
+Follow Major Incident Protocol. Communicate proactively to customers via in-app banner, SMS and chatbot. Queue transactions for replay when restored.
+AI BOT SCRIPT:
+"We’re experiencing a systems issue affecting transfers. No funds are lost. We’re working to restore services and will update you every 30 minutes."
+
+D2: Network Partner Outage
+
+Pause affected rails, post status notices, collaborate with partner for resolution.
+AI BOT SCRIPT:
+"Transfers to [NETWORK] are delayed due to their outage. Would you like me to keep your transfer on hold or attempt it now (it may queue)?"
+
+D3: Message Format / Mapping Errors
+
+Detect ISO or 20022 field mismatches; patch mapping layer and replay messages after correction.
+AI BOT SCRIPT:
+"We detected a technical error with the transfer instructions. Our technical team is investigating and will reprocess the transaction once the issue is resolved."
+
+7.5 CATEGORY E — CROSS-BORDER / FX & CONVERSION ISSUES
+E1: FX Rate & Charge Disputes
+
+Show applied FX rate, timestamp and fee schedule to customer. If bank error, refund the difference and log goodwill where appropriate.
+AI BOT SCRIPT:
+"The FX rate applied was [RATE] at [TIMESTAMP]. I have logged a review; if we applied the wrong rate, we will refund the difference and notify you."
+
+E2: Correspondent Bank Delays / Nostro Issues
+
+Monitor international settlement / SWIFT messages. Escalate to Correspondent Banking unit for manual trace.
+AI BOT SCRIPT:
+"Your international payment is awaiting correspondent bank settlement. We are liaising with our correspondent bank and will update you as soon as we have confirmation."
+
+E3: Sanctions / Compliance Holds
+
+Strict regulatory process: freeze and escalate to Compliance. Notify customer with minimal required detail and next steps.
+AI BOT SCRIPT:
+"Your transfer is under a compliance review. We can’t share details publicly, but a specialist from Compliance will contact you to resolve this. Please do not attempt to re-send the same payment."
+
+7.6 CATEGORY F — THIRD-PARTY (PSP / AGGREGATOR) ISSUES
+F1: PSP Callback Missing / Delayed
+
+Reconcile PSP webhook logs; request PSP to resend callback; reprocess where safe.
+AI BOT SCRIPT:
+"We didn’t receive confirmation from the payment provider. I’ve flagged this to the technical team and will retry processing. Ticket #[TICKET]."
+
+F2: PSP Reconciliation Mismatch
+
+Perform reconciliation and create finance/operations ticket. Provide customer status updates and ETA.
+AI BOT SCRIPT:
+"There is a reconciliation discrepancy with the payment provider. We’ve opened an operations ticket and will update you within 24 hours."
+
+EDGE CASES, SENSITIVE SCENARIOS & FRAUD RESPONSE
+8.1 APP SCAMS (Authorized Push Payments)
+
+Immediate high-priority escalation to Financial Crimes Unit (FCU).
+
+Freeze account on customer confirmation (do not freeze automatically unless evidence suggests active fraud that endangers funds).
+
+Collect evidence: chat transcripts, transfer refs, beneficiary details, screenshots, device fingerprint.
+AI BOT SCRIPT (sensitive tone):
+"I’m sorry you’re experiencing this. I’ve escalated this to our Financial Crimes team and created Ticket #[TICKET]. Please freeze your account in-app now and confirm when done. We will attempt recovery and advise on next steps."
+
+8.2 IDENTITY MISUSE / ACCOUNT TAKEOVER
+
+Lock account, force password reset, initiate incident investigation, advise customer to change linked credentials (email, phone).
+
+Coordinate with Legal and Law Enforcement if required.
+AI BOT SCRIPT:
+"We have detected suspicious activity. For your safety, we will temporarily restrict access to your account and guide you through account recovery steps. A specialist will contact you within [X] hours."
+
+8.3 DECEASED CUSTOMER / LEGAL HOLDS
+
+Escalate to Legal & Estate. Pause transactions, secure funds, require legal documentation for release.
+AI BOT SCRIPT:
+"I’m sorry for your loss. For transactions involving a deceased party, we must escalate to Legal. A specialist will contact you to guide the required documentation."
+
+ESCALATION MATRIX & SLAs (TARGETS)
+Tier 0 (AI Auto-handled) — instant to 1 hour (confirmation, simple status checks, FAQs)
+Tier 1 (Agent) — 0–4 hours (auto-reversal delays, simple manual tracing)
+Tier 2 (Ops Specialist) — 4–24 hours (recalls, GL adjustments)
+Tier 3 (Manager / FCU / Legal) — 24 hours to ongoing (fraud, systemic incidents)
+Major Incident (Exec / Incident Response) — immediate (critical outages, data breaches)
+
+SLA examples (subject to change by operations):
+
+Auto-reversal window: 1–3 business days
+
+Internal recall (same bank): 24–72 hours
+
+External recall (other bank): 1–28 business days depending on partner
+
+Response to escalations (Tier 2): within 4 hours
+
+Major incident customer updates: every 30 minutes
+
+ALAT (WEMA) FAQs — EXPANDED (User-friendly & Bot-ready)
+Each FAQ includes a suggested AI response template. Replace placeholders with dynamic fields.
+
+ACCOUNT CREATION & VERIFICATION
+Q: What do I need to open an ALAT account?
+A: "You can open an ALAT account quickly with your phone number and BVN. For full features like cards and loans you'll need a government-issued ID and proof of address (Tier 3). Would you like me to start the sign-up process now?"
+
+Q: Why is my BVN not validating?
+A: "Please ensure the name, date of birth and phone number match the BVN record. If they don’t, you can visit a branch or contact BVN support. Do you want me to show BVN help options?"
+
+Q: What are the account tiers and limits?
+A: "ALAT account tiers:
+
+Tier 1 (Basic) — light KYC, limited daily transfers (₦20,000)
+
+Tier 2 (Enhanced) — BVN linked, higher limits (₦200,000/day)
+
+Tier 3 (Full KYC) — full ID + proof of address, highest limits and access to cards, loans and investments.
+Would you like me to check your current account tier?"
+
+LOGIN & ACCESS
+Q: I forgot my PIN / password.
+A: "Use 'Forgot Password' on the login screen. I can send a reset OTP to your registered phone now. Shall I proceed?"
+
+Q: My account is locked.
+A: "Your account may be temporarily locked after repeated failed attempts. I can request a temporary unlock or guide you through a password reset. Would you like me to start that now?"
+
+TRANSFERS & PAYMENTS
+Q: My transfer failed but money left my account. What happens?
+A: "I’m sorry. Please provide the transaction reference or date/amount. I will check the status and if an auto-reversal is required, we will initiate it. Auto-reversals typically show within 1–3 business days."
+
+Q: Can I cancel a transfer?
+A: "If the transfer is still pending, we can attempt to stop or cancel it. If it’s already processed by the beneficiary bank, we’ll initiate a recall request. Can you share the transfer reference so I can check?"
+
+Q: How do I increase my transfer limits?
+A: "Upgrade to Tier 3 by uploading a valid ID and proof of address (Profile > Upgrade). I can open the upgrade page for you now."
+
+CARDS (VIRTUAL & PHYSICAL)
+Q: How do I get a virtual card?
+A: "Go to Cards > Request Card and choose 'Virtual'. A virtual card is created instantly and you can use it for online payments right away. Want me to create one for you now?"
+
+Q: Why was my card declined?
+A: "Common reasons: insufficient funds, merchant limitations, exceeded daily limits, or card not activated. I can check the last attempted transaction for you. Shall I?"
+
+SAVINGS & GOALS
+Q: How do Goals work?
+A: "Goals let you automate savings by schedule or rounding up purchases. Create a goal, set amount and frequency, and ALAT saves on your behalf. Would you like a sample goal created?"
+
+LOANS & OVERDRAFT
+Q: How do I qualify for a loan on ALAT?
+A: "Eligibility is based on account activity, repayment history, BVN and sometimes credit bureau checks. Maintain regular transactions and apply via the Loans section. Want me to check your eligibility?"
+
+SECURITY & FRAUD
+Q: I think I was scammed. What do I do?
+A: "Please freeze your account in the app now and confirm. I’ve escalated this to Financial Crimes (Ticket #[TICKET]). Do not share any OTPs or card details. A specialist will contact you."
+
+TECH & APP ISSUES
+Q: The app won’t open or keeps crashing.
+A: "Try clearing cache, updating the app, or reinstalling. If it persists, I can collect logs and escalate to technical support. Would you like me to gather logs now?"
+
+FEES & CHARGES
+Q: How much does an instant transfer cost?
+A: "Fees depend on transfer type and channel. Instant interbank transfers typically attract a small fee (see fees page). Do you want me to show current fee rates?"
+
+ACCOUNT & KYC MANAGEMENT
+Q: How do I change my phone number or email?
+A: "Go to Profile > Personal details > Update. For phone changes tied to BVN we may require identity verification. Would you like me to open the Profile page for you?"
+
+GENERAL & CONTACT
+Q: How do I contact ALAT support?
+A: "You can use Live Chat in the app, email help@alat.ng
+ or call 0700-2255-282. Would you like me to start a live chat now?"
+
+AI CSO RESPONSE TEMPLATES & TONE GUIDELINES
+Tone: Empathetic, concise, professional, and reassuring. Avoid technical jargon when speaking to customers. For high-value or sensitive issues, escalate to human agents with a soft handover message.
+
+Start: Greeting + ticket creation confirmation.
+
+Middle: Status + action taken + ETA.
+
+End: Next steps + offer of further help.
+
+Template: "Hello [Name]. I’ve created Ticket #[TICKET]. I have [checked/initiated] [action]. Expected update: [ETA]. Would you like me to send this summary to your registered email?"
+
+DATA LOGGING, MONITORING & DASHBOARDS
+Logging requirements:
+
+Conversation logs (id, timestamp, user id, channel)
+
+Intent & confidence scores
+
+Entities extracted
+
+Actions performed (stop, reversal, escalation)
+
+Ticket lifecycle events & timestamps
+
+Audit trail for manual overrides
+
+Suggested dashboards (Power BI / Grafana):
+
+Conversations over time, by intent and channel
+
+Top failed intents & unresolved tickets
+
+Auto-resolution rate (FCR by intent)
+
+SLA compliance heatmap
+
+Fraud / APP escalation trends
+
+Partner (PSP) failure heatmap
+
+TRAINING THE AI: INTENTS, UTTERANCES & ANNOTATION GUIDANCE
+
+Intent taxonomy mapped to Section 5 categories.
+
+Minimum 50 high-quality utterances per intent initially; expand with live logs.
+
+Label entities clearly (amount, beneficiary_name, last4, date, channel).
+
+Provide negative examples (non-intent phrases).
+
+Track confusion matrix weekly to refine intents.
+
+Retrain schedule: weekly for high-volume flows, monthly for stable flows, immediate retrain after major product change.
+
+SECURITY, PRIVACY, COMPLIANCE & REGULATORY CONTROLS
+
+Do not request full PAN, CVV or OTP in chat. Use masked displays (**** **** **** 1234).
+
+Retain logs per Data Retention Policy; purge per NDPR requirements.
+
+Encryption at rest and transit; access control for logs and model training data.
+
+Consent: For any data used for model training, obtain explicit consent or anonymize data.
+
+AML: Unusual patterns flagged automatically; suspicious activity escalated to FCU.
+
+CHANGE MANAGEMENT, RCA & CONTINUOUS IMPROVEMENT
+
+RCA tags mandatory on ticket close for incidents > Priority Threshold.
+
+Monthly Ops + Product review: top 10 RCAs, improvement plan, owner, deadlines.
+
+Product team to prioritize UI fixes (double-submit prevention), engineering to fix mapping issues, ops to refine reconciliation.
+
+GOVERNANCE, MODEL REVIEW & AUDIT TRAILS
+
+ML model performance, drift metrics, and confusion matrices are reviewed monthly by ML Governance Board.
+
+Any model updates must have versioned artifacts, test results, and rollback plan.
+
+Periodic audits by Compliance & Internal Audit for data use and decision rationale documentation.
+
+CONTACT DIRECTORY & SUPPORT CHANNELS
+
+Live Chat: inside ALAT app (primary)
+
+Email: help@alat.ng
+ (support)
+
+Phone: 0700-2255-282 (customer support)
+
+Escalation: payments-ops@wema.com
+ (internal)
+
+Financial Crimes: fcu@wema.com
+ (internal)
+
+Technical logs & integration: integrations@wema.com
+ (internal)
+
+Executive incident notification: ciso@wema.com
+; head-ops@wema.com
+
+APPENDICES
+Appendix A — Sample Ticket Schema (fields):
+
+ticket_id, created_at, created_by, customer_id, customer_tier, channel, transaction_ref, amount, currency, beneficiary_account, beneficiary_bank, status, assigned_to, actions[], severity, rca_tag[]
+
+Appendix B — Sample SQL (transfer logs extraction)
+-- Example (Postgres-like) simplified query (adjust for environment)
+-- SELECT txn_id, amount, currency, status, created_at, updated_at, switch_code, beneficiary_bank FROM transfer_logs
+-- WHERE created_at::date BETWEEN '2025-01-01' AND '2025-01-31' AND (beneficiary_bank = 'ABC' OR status = 'PENDING');
+
+Appendix C — Starter Intent List & Sample Utterances (compressed)
+INTENT: transfer_failed_debited
+
+"I sent money but it's taken from my account"
+
+"Money left my account but it shows failed"
+
+"Why was my transfer debited and not credited?"
+
+INTENT: wrong_account_sent
+
+"I sent to the wrong account by mistake"
+
+"I keyed in incorrect account number"
+
+"How can I reverse a transfer to the wrong account?"
+
+INTENT: increase_limit
+
+"How do I increase my transfer limit?"
+
+"I want to upgrade to allow bigger transfers"
+
+INTENT: card_declined_pos
+
+"My card was declined at POS"
+
+"Card keeps failing on payment"
+
+
+SIGN-OFF
+Prepared by: ____________________________ Date: 2025-12-08
+Reviewed by: ____________________________ Date: ________
+Approved by: ____________________________ Date: ________

@@ -1,0 +1,258 @@
+Wema Bank (ALAT) — Card Issue Resolution & Customer Guide
+Document Version: 3.0
+Prepared by: Card Services Department / AI CSO Integration Team
+Date: 2025-12-09
+Confidentiality: Internal Use Only
+
+======================================================================
+EXECUTIVE SUMMARY
+This document consolidates and expands card-related procedures for ALAT customers, covering self-service flows (in-app and USSD), agent-assisted processes, branch actions, fraud handling, card expiry/replacement, PIN management, dispute handling and escalation. Non-card issues are directed to branch visits or customer care. This version is both customer-facing (clear step guides) and operational (playbook for agents and the AI CSO).
+
+SCOPE
+Covers physical debit cards, virtual cards, tokenization (Apple/Google Pay), lost/stolen, damaged, blocked, PIN issues, disputes/fraud, expiry & renewal, new card requests, card delivery and related escalations for ALAT retail customers (Tiers 1–3). Corporate card procedures are out of scope and handled by Card Services Team per contract.
+
+KEY CONTACTS (CUSTOMERS)
+
+ALAT Live Chat (in-app) — primary support channel
+
+Customer Care: 0700-2255-282 (24/7)
+
+Email: help@alat.ng
+
+Branch: Visit nearest branch for non-card issues or where identity verification in-person is required
+
+======================================================================
+QUICK ACTION CHECKLIST — CUSTOMER (what to do immediately)
+
+Lost/Stolen Card: Block card immediately (in-app or call 0700-2255-282).
+
+Suspected Fraud: Freeze account, report via in-app Fraud Report or call Customer Care and select Fraud.
+
+Damaged/Not Working Card: Try re-activate in-app; if still failing, order replacement.
+
+PIN Issues: Reset/change PIN via ATM or in-app (if supported). If unable, visit branch.
+
+Card Expiry/Renewal: Check Profile > Cards; renewal is automatic for Tier 2 or 3 if address on file; else request replacement in-app.
+
+Non-card issues (e.g., KYC, account closure): Visit branch or call Customer Care.
+
+======================================================================
+SECTION A — BLOCKING / UNBLOCKING A CARD (STEP-BY-STEP)
+
+A1 — In-App (recommended; instant)
+
+Open ALAT app → Menu → Cards.
+
+Select the affected card (physical or virtual).
+
+Tap "Block Card" (temporary) — confirm. This immediately disables transactions (POS/ATM/Online) depending on block type.
+
+To permanently cancel: choose "Deactivate & Replace." Permanent cancel will invalidate the PAN and require a replacement order.
+
+To unblock: go to the same card entry and tap "Unblock" (may require OTP or biometric).
+
+A2 — Via USSD (if available)
+
+Dial the bank USSD code (e.g., *945#) → Card Services → Block Card.
+
+Follow prompts and keep the reference code.
+
+A3 — Via Call (Agent-assisted)
+
+Call 0700-2255-282 → Authenticate (BVN, OTP, security questions).
+
+Request "Block Card" and provide last 4 digits. Agent blocks immediately and gives a ticket/reference.
+
+For lost/stolen, request "Permanent Deactivate and Replace" and confirm delivery address.
+
+A4 — Via Branch (in-person)
+
+Visit branch with valid ID. Complete Card Deactivation/Replacement form. Agent deactivates card and initiates replacement.
+
+NOTES:
+
+Temporary block keeps the PAN active for reactivation; permanent deactivation issues a new PAN.
+
+Blocking a virtual card invalidates its tokens; re-tokenization required for new card.
+
+======================================================================
+SECTION B — PIN MANAGEMENT (RESET / CHANGE / UNBLOCK)
+
+B1 — Change PIN (in-app)
+
+ALAT app → Cards → Select Card → Manage PIN → Change PIN.
+
+Authenticate via OTP/biometric. Input new PIN and confirm.
+
+B2 — Reset PIN (ATM method)
+
+Insert card at ATM → Other Transactions → PIN Services → Reset PIN.
+
+Authenticate using either existing PIN or OTP, then set new 4-digit PIN.
+
+B3 — Forgot PIN / Locked PIN
+
+If PIN locked after attempts: in-app "Forgot PIN" → identity verification (BVN + OTP).
+
+If in-app reset not permitted (security policy), require branch visit with ID.
+
+SECURITY RECOMMENDATIONS:
+
+Use a unique PIN; do not store it near the card; do not share OTPs or PIN.
+
+======================================================================
+SECTION C — NEW CARD ORDER / REPLACEMENT / EXPIRY
+
+C1 — When to request a new card
+
+Lost, stolen, damaged, expired, compromised PAN or moving address.
+
+C2 — Ordering Replacement (In-App)
+
+Cards → Card Settings → Request Replacement. Choose Standard (5–7 business days) or Express (1–2 business days; fee applies).
+
+Confirm delivery address (must match KYC for standard shipping).
+
+Track delivery in app using provided shipment reference.
+
+C3 — Expiry & Renewal
+
+Auto-renew: Tier 2/3 with valid KYC and deliverable address: card dispatched ~30 days before expiry.
+
+Manual renewal: If address not on file or special card type, customer must request replacement in-app or via branch.
+
+C4 — Delivery & Activation
+
+Activate physical card in-app (Cards → Activate Card) or at ATM using PIN. Virtual cards usually active immediately.
+
+If activation fails, contact support and provide activation error reference.
+
+======================================================================
+SECTION D — FRAUD & DISPUTE PROCESS (IMMEDIATE ACTIONS + INVESTIGATION)
+
+D1 — Immediate Customer Actions (first 60 minutes)
+
+Freeze/Block card via in-app or call Customer Care.
+
+Do NOT share OTP, PIN, CVV with anyone.
+
+Document suspicious transactions (screenshots, time, merchant).
+
+Freeze account for transfer fraud and escalate to FCU.
+
+D2 — Reporting Fraud (In-App)
+
+Menu → Support → Report Fraud → Fill form (transaction refs, screenshots).
+
+System generates Ticket ID and guidance.
+
+D3 — Agent / Investigator Actions
+
+Authenticate caller, log ticket with priority = Fraud.
+
+Pull logs: switch trace, merchant acquirer info, 3DS logs, device fingerprint.
+
+If eligible, issue provisional credit pending investigation.
+
+Engage FCU and involve law enforcement if necessary.
+
+D4 — Timeline & Communication
+
+Acknowledge within 1 hour; investigator contact within 4 hours for high-priority.
+
+Investigation timeline 7–30 business days depending on complexity.
+
+D5 — Fraud vs Friendly Dispute
+
+Fraud = unauthorized transactions (device takeover, known scam).
+
+Friendly disputes = cardholder recognizes charge but disputes merchant service; follow merchant dispute playbook.
+
+======================================================================
+SECTION E — DIGITAL WALLET & TOKENIZATION (APPLE/GOOGLE PAY)
+
+E1 — Add card to wallet: Cards → Add to Mobile Wallet → Follow OS flow.
+E2 — If tokenization fails: remove existing token, purge in Card Services console, then re-tokenize.
+E3 — Blocking a card invalidates tokens; customer should also remove tokens from device.
+
+======================================================================
+SECTION F — CARD DECLINED / AUTHORIZATION ISSUES (TROUBLESHOOTING)
+
+Common causes & actions:
+
+Insufficient funds → top-up.
+
+Merchant category blocked → toggle in app if allowed.
+
+International restrictions → request temporary allowance or alternative method.
+
+3D Secure failure → retry with correct OTP or contact merchant.
+
+System outage → check status page; agent escalate.
+
+Agent script: "I see your card attempt failed due to [reason]. Try [action]. If persists, I will escalate to Card Ops."
+
+======================================================================
+SECTION G — DISPUTE RESOLUTION (STEP-BY-STEP)
+
+Customer opens dispute in-app.
+
+Collect evidence: receipt, screenshot, emails.
+
+Issue provisional credit (if policy allows).
+
+Investigate: gather logs and merchant responses.
+
+Final resolution: permanent credit or reversal of provisional credit with explanation.
+
+Escalate unresolved disputes to Dispute Resolution Specialist; adhere to card scheme arbitration timelines.
+
+======================================================================
+SECTION H — WHEN TO DIRECT CUSTOMER TO BRANCH OR CALL CUSTOMER CARE
+
+Direct customers to branch or call Customer Care when:
+
+In-person identity verification required (KYC mismatch, ID documents).
+
+Legal matters (deceased account, power of attorney).
+
+Card collection required in-branch (security reasons).
+
+Account closure, large limit changes beyond agent discretion, or notarized docs required.
+
+AI CSO script:
+"If you prefer, visit your nearest branch for in-person verification or call Customer Care at 0700-2255-282. For non-card matters such as KYC updates or legal documentation, please go to the branch."
+
+======================================================================
+SECTION I — ESCALATION MATRIX (CARD-RELATED)
+
+Tier 1 — Self-service & Agent (Immediate / <1 hour)
+Tier 2 — Card Services Specialist (30 minutes – 4 hours)
+Tier 3 — Card Ops, Technical Ops, FCU (4 – 48 hours)
+Priority — Major incident (Immediate Exec notification)
+
+======================================================================
+APPENDIX A — TEMPLATE MESSAGES (AGENT / AI CSO)
+
+Lost Card Acknowledgement (auto):
+"Hello [Name], we have blocked your card and created Ticket #[TICKET]. Please confirm whether you want a replacement issued. For urgent help call 0700-2255-282."
+
+Fraud Escalation (agent):
+"We have escalated your case to Financial Crimes (Ticket #[TICKET]). Please do not share any OTPs. An investigator will contact you within 4 hours."
+
+Replacement Dispatch (auto):
+"Your replacement card has been dispatched. Tracking reference: [TRACK_REF]. Expected delivery: [DATE]. Activate it in-app once received."
+
+======================================================================
+AUDIT, LOGGING & METRICS
+
+Log every action (block/unblock, PIN reset, replacement, dispute) with user id, timestamp, agent id, and ticket id.
+
+Metrics: Time-to-block, time-to-investigator contact, provisional credit rate, dispute resolution time, delivery SLA compliance.
+
+======================================================================
+CONCLUSION & NEXT STEPS
+Publish this into the AI CSO knowledge base; integrate flows into in-app support, USSD (where applicable), and the ticketing system. Update training utterances and automation triggers. For any non-card related issues the AI CSO must direct customers to visit the nearest branch or call Customer Care.
+
+======================================================================
+END OF DOCUMENT

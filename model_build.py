@@ -16,14 +16,14 @@ def clean_text(text):
     return text
 
 # Load data
-df = pd.read_csv("customer_intents.csv")
+df = pd.read_csv("bank_intents.csv")
 
 # Clean all the questions
-df['User_Query'] = df['User_Query'].apply(clean_text)
+df['text'] = df['text'].apply(clean_text)
 
 # Split data - 80% training, 20% testing
 X_train, X_test, Y_train, Y_test = train_test_split(
-    df['User_Query'], df['Intent'], test_size=0.2, random_state=42
+    df['text'], df['label'], test_size=0.2, random_state=42
 )
 
 # Create word features - NOW WITH BIGRAMS!

@@ -19,8 +19,8 @@ load_dotenv()
 
 
 SUBSCRIPTION = os.getenv("YOUR_SUBSCRIPTION_ID")
-RESOURCE_GROUP = "AI-Group"
-WORKSPACE = "ai-customer-service"
+RESOURCE_GROUP = "aicso-dev-rg"
+WORKSPACE = "aicso-dev-ml-ws"
 
 ENDPOINT_FILE = "deployed_endpoint.json"
 
@@ -79,18 +79,18 @@ try:
             existing_endpoint = None
 
     # --- Use existing model and creaste environment ---
-    model = ml_client.models.get(name="bank-intent-model", version="1")
+    # model = ml_client.models.get(name="bank-intent-model", version="1")
     
     # --- Register model if not exists ---
-    # model = Model(
-    #     path="bank_model.pkl",
-    #     name="bank-intent-model",
-    #     version="1"
-    #     type="custom_model"
-    # )
+    model = Model(
+        path="bank_model.pkl",
+        name="bank-intent-model",
+        version="1",
+        type="custom_model"
+    )
 
-    # ml_client.models.create_or_update(model)
-    # print("Model registered successfully!")
+    ml_client.models.create_or_update(model)
+    print("Model registered successfully!")
 
     env = Environment(
         conda_file="environment.yml",
@@ -142,23 +142,9 @@ try:
     if not deployment_exists:
 
         instance_types_to_try = [
-        # General Purpose - Most likely to work
         "Standard_DS2_v2",
         "Standard_DS3_v2", 
-        "Standard_D2s_v3",
-        "Standard_D4s_v3",
-        
-        # Memory Optimized (if your model needs more RAM)
-        "Standard_E2s_v3",
-        "Standard_E4s_v3",
-        
-        # Compute Optimized
-        "Standard_F2s_v2",
-        "Standard_F4s_v2",
-        
-        # Smallest generally available for endpoints
-        "Standard_DS1_v2",
-        "Standard_D1_v2"
+        "Standard_D2s_v3"
     ]
 
         successful_deployment = False

@@ -3,11 +3,6 @@ numpy
 pandas
 scikit-learn
 openai
-langchain
-langchain-openai
-langchain-core
-langchain-community
-langchain-classic
 azure-cognitiveservices-speech
 requests
 azure-ai-ml
