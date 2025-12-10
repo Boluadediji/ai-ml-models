@@ -1,0 +1,84 @@
+trigger:
+  - main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  - group: 'aicso'
+  - name: acrName
+    value: 'aicsodevacr'
+  - name: imageName
+    value: 'aicso-ai'
+  - name: resourceGroup
+    value: 'aicso-dev-rg'
+  - name: containerAppName
+    value: 'aicso-dev-ai-ca'
+
+steps:
+  # --- STEP 1: Build & Push ---
+  - task: Docker@2
+    displayName: 'Build and Push AI Image'
+    inputs:
+      command: buildAndPush
+      repository: $(imageName)
+      dockerfile: '**/Dockerfile'
+      containerRegistry: 'AicsoACRConnection'
+      tags: |
+        latest
+        $(Build.BuildId)
+
+  # --- STEP 2: Deploy & Inject Secrets ---
+  - task: Bash@3
+    displayName: 'Deploy AI Container & Config'
+    inputs:
+      targetType: 'inline'
+      script: |
+        set -e
+
+        echo "1. Logging in..."
+        az login --service-principal -u "$AZ_SP_CLIENT_ID" -p "$AZ_SP_SECRET_VALUE" --tenant "$AZ_SP_TENANT_ID"
+
+        # Get Registry Credentials dynamically
+        ACR_USERNAME=$(az acr credential show --name $(acrName) --query username -o tsv)
+        ACR_PASSWORD=$(az acr credential show --name $(acrName) --query passwords[0].value -o tsv)
+
+        echo "2. Setting Registry Access..."
+        az containerapp registry set \
+          --name $(containerAppName) \
+          --resource-group $(resourceGroup) \
+          --server $(acrName).azurecr.io \
+          --username $ACR_USERNAME \
+          --password $ACR_PASSWORD
+
+        echo "3. Updating App with All Environment Variables..."
+        az containerapp update \
+          --name $(containerAppName) \
+          --resource-group $(resourceGroup) \
+          --image $(acrName).azurecr.io/$(imageName):$(Build.BuildId) \
+          --set-env-vars \
+            "azure_resource_key=$VAR_RESOURCE_KEY" \
+            "azure_resource_endpoint=$VAR_RESOURCE_ENDPOINT" \
+            "YOUR_SUBSCRIPTION_ID=$VAR_SUB_ID" \
+            "model_api_key=$VAR_MODEL_KEY" \
+            "model_endpoint=$VAR_MODEL_ENDPOINT" \
+            "AZURE_SPEECH_KEY=$VAR_SPEECH_KEY" \
+            "AZURE_SPEECH_REGION=$VAR_SPEECH_REGION" \
+            "AZURE_OPENAI_API_VERSION=2024-12-01-preview" \
+            "EMBEDDING_DEPLOYMENT_NAME=aicso-embed"
+
+        echo "Deployment Complete!"
+    env:
+      # --- MAPPING LIBRARY VARIABLES TO SCRIPT VARIABLES ---
+      AZ_SP_CLIENT_ID: $(az_sp_client_id)
+      AZ_SP_SECRET_VALUE: $(az_sp_secret_value)
+      AZ_SP_TENANT_ID: $(az_sp_tenant_id)
+
+      # Your Custom Secrets (Must exist in Library)
+      VAR_RESOURCE_KEY: $(azure_resource_key)
+      VAR_RESOURCE_ENDPOINT: $(azure_resource_endpoint)
+      VAR_SUB_ID: $(YOUR_SUBSCRIPTION_ID)
+      VAR_MODEL_KEY: $(model_api_key)
+      VAR_MODEL_ENDPOINT: $(model_endpoint)
+      VAR_SPEECH_KEY: $(AZURE_SPEECH_KEY)
+      VAR_SPEECH_REGION: $(AZURE_SPEECH_REGION)
