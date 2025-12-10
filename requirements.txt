@@ -10,3 +10,4 @@ azure-identity
 azure-core
 azure-storage-blob
 msal
+sounddevice
