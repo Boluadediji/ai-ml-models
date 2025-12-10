@@ -16,7 +16,7 @@ AZURE_API_VERSION = "2024-12-01-preview"
 # -----------------------------
 # Model Settings
 # -----------------------------
-CHAT_MODEL = "gpt-4o-mini"
+CHAT_MODEL = "aicso"
 
 # -----------------------------
 # Document Paths
