@@ -99,7 +99,7 @@ def chatbot():
         # LLM call
         try:
             response = client.chat.completions.create(
-                model="gpt-4o-mini",
+                model="aicso",
                 messages=messages,
                 temperature=0,
                 max_tokens=250
