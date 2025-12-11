@@ -25,4 +25,4 @@ COPY . .
 EXPOSE 8000
 
 # 6. Run the App
-CMD ["python", "main.py"]
+CMD ["python", "api.py"]
