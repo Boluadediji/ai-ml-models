@@ -11,3 +11,6 @@ azure-core
 azure-storage-blob
 msal
 sounddevice
+fastapi
+uvicorn
+python-multipart

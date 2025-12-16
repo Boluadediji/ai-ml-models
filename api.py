@@ -162,7 +162,7 @@ import traceback
 from typing import Optional, List
 from fastapi import FastAPI, HTTPException, UploadFile, File, WebSocket, WebSocketDisconnect, APIRouter
 from pydantic import BaseModel
-
+import uvicorn
 from text_handler import handle_text_message
 from voice import process_user_utterance, handle_live_call
 
@@ -516,3 +516,29 @@ def health():
 # @app.get("/health")
 # def health():
 #     return {"status": "ok"}
+
+# # In your app.py (FastAPI endpoint)
+# @app.post("/api/generate-avatar-response")
+# async def generate_avatar_response(query_data: dict):
+#     # 1. Your existing pipeline
+#     user_text = await transcribe_audio(query_data.get("audio"))
+#     llm_response = await generate_llm_response(user_text)
+    
+#     # 2. Send to D-ID
+#     d_id = DIDManager()
+#     talk_result = d_id.create_talk(
+#         script_text=llm_response,
+#         avatar_id="your_did_avatar_id",
+#         voice_id="en-US-JennyNeural"
+#     )
+    
+#     # 3. Return the direct WebRTC URL to frontend
+#     return {
+#         "user_text": user_text,
+#         "llm_response": llm_response,
+#         "avatar_stream_url": talk_result["web_url"]  # Frontend uses this
+#     }
+
+
+if __name__ == "__main__":
+    uvicorn.run("api:app", host="0.0.0.0", port=8000, reload=True)
