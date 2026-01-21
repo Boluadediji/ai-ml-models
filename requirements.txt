@@ -14,3 +14,4 @@ sounddevice
 fastapi
 uvicorn
 python-multipart
+pyaudio

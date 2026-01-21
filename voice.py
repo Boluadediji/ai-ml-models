@@ -196,3 +196,32 @@ async def handle_live_call(get_audio_chunk, send_audio_chunk, client):
             continue
 
     print("📵 Live call ended.")
+
+
+if __name__ == "__main__":
+    import asyncio
+
+    async def main():
+        # Load a test WAV file
+        test_wav_path = "test_audio.wav"  # replace with your file
+        if not os.path.exists(test_wav_path):
+            print(f"Test audio file not found: {test_wav_path}")
+            return
+
+        with open(test_wav_path, "rb") as f:
+            audio_bytes = f.read()
+
+        # Process the user utterance
+        result = await process_user_utterance(audio_bytes)
+
+        print("Transcript:", result["text"])
+        print("Intent:", result["intent"])
+        print("Reply:", result["reply"])
+        print("Audio bytes length:", len(result["audio"]))
+
+        # Optional: save TTS output to a file
+        with open("tts_output.wav", "wb") as f:
+            f.write(result["audio"])
+        print("TTS audio saved as tts_output.wav")
+
+    asyncio.run(main())
